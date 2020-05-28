@@ -1,15 +1,25 @@
 package com.example.recycleviewdetails;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends AppCompatActivity implements ClickInterface{
 
@@ -17,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements ClickInterface{
     private Adapter adapter;
     private List<String> bookList;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private String deleteBook="";
+    private List<String> archiveBookList= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +75,84 @@ public class MainActivity extends AppCompatActivity implements ClickInterface{
 
             }
         });
+
+        ItemTouchHelper itemTouchHelper= new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
+
+    ItemTouchHelper.SimpleCallback simpleCallback= new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START |
+            ItemTouchHelper.END,
+            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+            int fromPosition= viewHolder.getAdapterPosition();
+            int toPosition= target.getAdapterPosition();
+
+            Collections.swap(bookList,fromPosition,toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition,toPosition);
+
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+           final int position= viewHolder.getAdapterPosition();
+
+            switch (direction){
+                case ItemTouchHelper.LEFT:
+                    deleteBook= bookList.get(position);
+                    bookList.remove(position);
+                    adapter.notifyItemRemoved(position);
+
+                    Snackbar.make(recyclerView,deleteBook,Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            bookList.add(position,deleteBook);
+                            adapter.notifyItemInserted(position);
+                        }
+                    }).show();
+
+                    break;
+                case ItemTouchHelper.RIGHT:
+                    final String archiveBook= bookList.get(position);
+                    archiveBookList.add(archiveBook);
+                    bookList.remove(position);
+                    adapter.notifyItemRemoved(position);
+
+                    Snackbar.make(recyclerView,archiveBook+" Archived.",Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            archiveBookList.remove(archiveBookList.lastIndexOf(archiveBook));
+                            bookList.add(position,archiveBook);
+                            adapter.notifyItemInserted(position);
+
+                        }
+                    }).show();
+
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX,
+                                float dY, int actionState, boolean isCurrentlyActive) {
+
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.colorAccent))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete)
+                    .addSwipeRightBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary))
+                    .addSwipeRightActionIcon(R.drawable.ic_archive)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
 
     @Override
     public void onItemClick(int position) {
