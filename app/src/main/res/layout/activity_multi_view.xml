@@ -3,12 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:padding="5dp"
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".MultiViewActivity">
 
+        <include layout="@layout/toolbar"
+            android:id="@+id/multiViewActivityToolId">
+
+        </include>
+
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_margin="5dp"
             android:id="@+id/multiRecycleViewId"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

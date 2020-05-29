@@ -9,7 +9,7 @@
 
     </item>
     <item
-        android:title="Section View"
+        android:title="Collaps Toolbar"
         android:id="@+id/sectionViewId"
         app:showAsAction="never">
 

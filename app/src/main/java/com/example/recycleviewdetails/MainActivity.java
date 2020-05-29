@@ -2,6 +2,7 @@ package com.example.recycleviewdetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,12 +36,16 @@ public class MainActivity extends AppCompatActivity implements ClickInterface{
     private SwipeRefreshLayout swipeRefreshLayout;
     private String deleteBook="";
     private List<String> archiveBookList= new ArrayList<>();
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Book List");
+
+        toolbar= findViewById(R.id.mainActivityToolId);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Book List");
 
         bookList= new ArrayList<>();
 
@@ -197,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements ClickInterface{
                 startActivity(intent);
                 break;
             case R.id.sectionViewId:
-                Toast.makeText(this, "Section", Toast.LENGTH_SHORT).show();
+               Intent intent1= new Intent(MainActivity.this,CollapsActivity.class);
+               startActivity(intent1);
                 break;
 
 

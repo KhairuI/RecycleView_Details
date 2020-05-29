@@ -1,6 +1,7 @@
 package com.example.recycleviewdetails;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,12 +12,16 @@ import java.util.ArrayList;
 public class MultiViewActivity extends AppCompatActivity {
     private RecyclerView multiRecycle;
     private MultiViewAdapter multiViewAdapter;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_view);
-        setTitle("Multi View");
+
+        toolbar= findViewById(R.id.multiViewActivityToolId);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Multi View");
 
         Bundle bundle = getIntent().getExtras();
         ArrayList<String> item = (ArrayList<String>) bundle.getSerializable("booklist");
