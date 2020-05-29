@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/multiBookNameId"
+                android:text="No Text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </androidx.appcompat.widget.AppCompatTextView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/multiItemId"
+                android:layout_marginTop="5dp"
+                android:text="No Text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </androidx.appcompat.widget.AppCompatTextView>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.cardview.widget.CardView>

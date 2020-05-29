@@ -8,13 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,18 +52,20 @@ public class MainActivity extends AppCompatActivity implements ClickInterface{
         recyclerView.setAdapter(adapter);
 
         bookList.add("In Search of Lost Time");
-        bookList.add("Ulysses");
+        bookList.add("Ulysses:1");
         bookList.add("Don Quixote");
         bookList.add("The Great Gatsby");
         bookList.add("One Hundred Years of Solitude");
         bookList.add("Moby Dick");
         bookList.add("War and Peace");
         bookList.add("Lolita");
+        bookList.add("Ulysses:2");
         bookList.add("Hamlet");
         bookList.add("The Catcher in the Rye");
         bookList.add("The Brothers Karamazov");
         bookList.add("Crime and Punishment");
         bookList.add("Madame Bovary");
+        bookList.add("Ulysses:3");
         bookList.add("The Divine Comedy");
         bookList.add("Pride and Prejudice");
 
@@ -165,6 +173,36 @@ public class MainActivity extends AppCompatActivity implements ClickInterface{
 
         bookList.remove(position);
         adapter.notifyItemRemoved(position);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater= getMenuInflater();
+        menuInflater.inflate(R.menu.menu_item,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.multiViewId:
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("booklist", (Serializable) bookList);
+
+                Intent intent= new Intent(MainActivity.this,MultiViewActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case R.id.sectionViewId:
+                Toast.makeText(this, "Section", Toast.LENGTH_SHORT).show();
+                break;
+
+
+        }
+        return super.onOptionsItemSelected(item);
 
     }
 }
